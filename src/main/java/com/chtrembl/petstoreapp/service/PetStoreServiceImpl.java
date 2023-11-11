@@ -71,6 +71,12 @@ public class PetStoreServiceImpl implements PetStoreService {
 				String.format("PetStoreApp user %s is requesting to retrieve pets from the PetStorePetService",
 						this.sessionUser.getName()),
 				this.sessionUser.getCustomEventProperties(), null);
+
+		this.sessionUser.getTelemetryClient().trackMetric(
+				String.format("User %s is requesting to retrieve pets from the PetStorePetService, session %s",
+						this.sessionUser.getName(), this.sessionUser.getSessionId()), 0.00
+				);
+
 		try {
 			Consumer<HttpHeaders> consumer = it -> it.addAll(this.webRequest.getHeaders());
 			pets = this.petServiceWebClient.get().uri("petstorepetservice/v2/pet/findByStatus?status=available")
@@ -92,7 +98,10 @@ public class PetStoreServiceImpl implements PetStoreService {
 			pets = pets.stream().filter(pet -> category.equals(pet.getCategory().getName()))
 					.collect(Collectors.toList());
 
-			logger.info("Successful call to get pets, {} pets returned", pets.size());
+			this.sessionUser.getTelemetryClient().trackMetric(
+					String.format("Pets returned to user %s, session %s",
+							this.sessionUser.getName(), this.sessionUser.getSessionId()), pets.size()
+			);
 			return pets;
 		} catch (WebClientException wce) {
 			this.sessionUser.getTelemetryClient().trackException(wce);
