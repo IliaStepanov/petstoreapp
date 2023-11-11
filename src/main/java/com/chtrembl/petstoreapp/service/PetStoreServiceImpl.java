@@ -91,6 +91,8 @@ public class PetStoreServiceImpl implements PetStoreService {
 			// filter this specific request per category
 			pets = pets.stream().filter(pet -> category.equals(pet.getCategory().getName()))
 					.collect(Collectors.toList());
+
+			logger.info("Successful call to get pets, {} pets returned", pets.size());
 			return pets;
 		} catch (WebClientException wce) {
 			this.sessionUser.getTelemetryClient().trackException(wce);
