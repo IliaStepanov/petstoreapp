@@ -136,7 +136,7 @@ public class WebAppController {
 	// differentiation
 	@GetMapping(value = { "/dogbreeds", "/catbreeds", "/fishbreeds" })
 	public String breeds(Model model, OAuth2AuthenticationToken token, HttpServletRequest request,
-			@RequestParam(name = "category") String category) throws URISyntaxException {
+			@RequestParam(name = "category") String category) throws Exception {
 
 		// quick validation, should really be done in validators, check for cross side
 		// scripting etc....
@@ -152,7 +152,7 @@ public class WebAppController {
 	@GetMapping(value = "/breeddetails")
 	public String breedeetails(Model model, OAuth2AuthenticationToken token, HttpServletRequest request,
 			@RequestParam(name = "category") String category, @RequestParam(name = "id") int id)
-			throws URISyntaxException {
+			throws Exception {
 
 		// quick validation, should really be done in validators, check for cross side
 		// scripting etc....
@@ -184,7 +184,7 @@ public class WebAppController {
 	@GetMapping(value = "/products")
 	public String products(Model model, OAuth2AuthenticationToken token, HttpServletRequest request,
 			@RequestParam(name = "category") String category, @RequestParam(name = "id") int id)
-			throws URISyntaxException {
+			throws Exception {
 
 		// quick validation, should really be done in validators, check for cross side
 		// scripting etc....
