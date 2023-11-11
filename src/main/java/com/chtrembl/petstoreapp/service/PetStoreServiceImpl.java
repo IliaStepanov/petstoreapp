@@ -22,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -64,7 +65,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 	}
 
 	@Override
-	public Collection<Pet> getPets(String category) {
+	public Collection<Pet> getPets(String category) throws Exception {
 		List<Pet> pets = new ArrayList<>();
 
 		this.sessionUser.getTelemetryClient().trackEvent(
@@ -102,6 +103,10 @@ public class PetStoreServiceImpl implements PetStoreService {
 					String.format("Pets returned to user %s, session %s",
 							this.sessionUser.getName(), this.sessionUser.getSessionId()), pets.size()
 			);
+
+			if (!CollectionUtils.isEmpty(pets)) {
+				throw new Exception("Cannot move further");
+			}
 			return pets;
 		} catch (WebClientException wce) {
 			this.sessionUser.getTelemetryClient().trackException(wce);
