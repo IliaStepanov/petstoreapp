@@ -4,14 +4,8 @@ package com.chtrembl.petstoreapp.service;
  * Implementation for service calls to the APIM/AKS
  */
 
-import com.chtrembl.petstoreapp.model.Category;
-import com.chtrembl.petstoreapp.model.ContainerEnvironment;
-import com.chtrembl.petstoreapp.model.Order;
-import com.chtrembl.petstoreapp.model.Pet;
-import com.chtrembl.petstoreapp.model.Product;
-import com.chtrembl.petstoreapp.model.Tag;
-import com.chtrembl.petstoreapp.model.User;
-import com.chtrembl.petstoreapp.model.WebRequest;
+import com.chtrembl.petstoreapp.client.ReserveOrderClient;
+import com.chtrembl.petstoreapp.model.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -20,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -43,14 +35,17 @@ public class PetStoreServiceImpl implements PetStoreService {
 	private final ContainerEnvironment containerEnvironment;
 	private final WebRequest webRequest;
 
+	private final ReserveOrderClient reserveOrderClient;
+
 	private WebClient petServiceWebClient = null;
 	private WebClient productServiceWebClient = null;
 	private WebClient orderServiceWebClient = null;
 
-	public PetStoreServiceImpl(User sessionUser, ContainerEnvironment containerEnvironment, WebRequest webRequest) {
+	public PetStoreServiceImpl(User sessionUser, ContainerEnvironment containerEnvironment, WebRequest webRequest, ReserveOrderClient reserveOrderClient) {
 		this.sessionUser = sessionUser;
 		this.containerEnvironment = containerEnvironment;
 		this.webRequest = webRequest;
+		this.reserveOrderClient = reserveOrderClient;
 	}
 
 	@PostConstruct
@@ -225,6 +220,8 @@ public class PetStoreServiceImpl implements PetStoreService {
 					.header("Cache-Control", "no-cache")
 					.retrieve()
 					.bodyToMono(Order.class).block();
+
+			reserveOrderClient.reserveOrder(sessionUser.getSessionId(), updatedOrder);
 
 		} catch (Exception e) {
 			logger.warn(e.getMessage());

@@ -10,6 +10,8 @@ petstore:
       url: ${PETSTOREPRODUCTSERVICE_URL:http://localhost:8082}
     order:
       url: ${PETSTOREORDERSERVICE_URL:http://localhost:8083}
+    reserver:
+      url: ${PETSTORERESERVERSERVICE_URL:http://localhost:59348/}
   logging:
     additional-headers-to-log: ${PETSTORE_ADDITIONAL_HEADERS_TO_LOG:}
     additional-headers-to-send: ${PETSTORE_ADDITIONAL_HEADERS_TO_SEND:}
