@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface PetStoreService {
-	Collection<Pet> getPets(String category) throws Exception;
+	Collection<Pet> getPets(String category);
 
 	Collection<Product> getProducts(String category, List<Tag> tags);
 

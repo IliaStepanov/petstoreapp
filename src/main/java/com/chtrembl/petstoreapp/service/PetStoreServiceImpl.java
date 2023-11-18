@@ -65,7 +65,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 	}
 
 	@Override
-	public Collection<Pet> getPets(String category) throws Exception {
+	public Collection<Pet> getPets(String category) {
 		List<Pet> pets = new ArrayList<>();
 
 		this.sessionUser.getTelemetryClient().trackEvent(
@@ -103,10 +103,6 @@ public class PetStoreServiceImpl implements PetStoreService {
 					String.format("Pets returned to user %s, session %s",
 							this.sessionUser.getName(), this.sessionUser.getSessionId()), pets.size()
 			);
-
-			if (!CollectionUtils.isEmpty(pets)) {
-				throw new Exception("Cannot move further");
-			}
 			return pets;
 		} catch (WebClientException wce) {
 			this.sessionUser.getTelemetryClient().trackException(wce);
