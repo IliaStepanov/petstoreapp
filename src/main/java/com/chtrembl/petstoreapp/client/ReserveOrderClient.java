@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 
-@Service
+//@Service  disabling module 5 beans
 public class ReserveOrderClient {
 
     private static final Logger logger = LoggerFactory.getLogger(PetStoreServiceImpl.class);

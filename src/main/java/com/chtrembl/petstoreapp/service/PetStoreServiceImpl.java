@@ -35,17 +35,16 @@ public class PetStoreServiceImpl implements PetStoreService {
 	private final ContainerEnvironment containerEnvironment;
 	private final WebRequest webRequest;
 
-	private final ReserveOrderClient reserveOrderClient;
+//	private final ReserveOrderClient reserveOrderClient;
 
 	private WebClient petServiceWebClient = null;
 	private WebClient productServiceWebClient = null;
 	private WebClient orderServiceWebClient = null;
 
-	public PetStoreServiceImpl(User sessionUser, ContainerEnvironment containerEnvironment, WebRequest webRequest, ReserveOrderClient reserveOrderClient) {
+	public PetStoreServiceImpl(User sessionUser, ContainerEnvironment containerEnvironment, WebRequest webRequest) {
 		this.sessionUser = sessionUser;
 		this.containerEnvironment = containerEnvironment;
 		this.webRequest = webRequest;
-		this.reserveOrderClient = reserveOrderClient;
 	}
 
 	@PostConstruct
@@ -212,7 +211,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 
 			Consumer<HttpHeaders> consumer = it -> it.addAll(this.webRequest.getHeaders());
 
-			updatedOrder = this.orderServiceWebClient.post().uri("petstoreorderservice/v2/store/order")
+			this.orderServiceWebClient.post().uri("petstoreorderservice/v2/store/order")
 					.body(BodyInserters.fromPublisher(Mono.just(orderJSON), String.class))
 					.accept(MediaType.APPLICATION_JSON)
 					.headers(consumer)
@@ -221,7 +220,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 					.retrieve()
 					.bodyToMono(Order.class).block();
 
-			reserveOrderClient.reserveOrder(sessionUser.getSessionId(), updatedOrder);
+//			reserveOrderClient.reserveOrder(sessionUser.getSessionId(), updatedOrder);
 
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
