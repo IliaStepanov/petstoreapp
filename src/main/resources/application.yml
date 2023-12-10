@@ -55,3 +55,5 @@ spring:
           user-flows:
             sign-up-or-sign-in: B2C_1_is-petstore-singin
           user-name-attribute-name: given_name
+host: ${HOST:}
+
