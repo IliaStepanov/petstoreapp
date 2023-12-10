@@ -41,3 +41,17 @@ spring:
     cache: false
   cache:
     cache-names: currentUsers
+  cloud:
+    azure:
+      active-directory:
+        b2c:
+          enabled: true
+          base-uri: https://ispetstoreapp.b2clogin.com/ispetstoreapp.onmicrosoft.com/
+          credential:
+            client-id: 59638b9a-584d-4015-91da-c84de9b5d684
+            client-secret: ${AD_SECRET:60000}
+          login-flow: sign-up-or-sign-in
+          logout-success-url: http://localhost:8080/home
+          user-flows:
+            sign-up-or-sign-in: B2C_1_is-petstore-singin
+          user-name-attribute-name: given_name

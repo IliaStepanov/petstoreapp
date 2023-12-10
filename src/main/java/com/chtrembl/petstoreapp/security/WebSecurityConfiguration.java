@@ -40,7 +40,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 			http.csrf().ignoringAntMatchers("/signalr/**").and().authorizeRequests().antMatchers("/")
 					.permitAll()
-					.antMatchers("/*breed*").permitAll()
+//					.antMatchers("/*breed*").permitAll()
 					.antMatchers("/*product*").permitAll()
 					.antMatchers("/*cart*").permitAll()
 					.antMatchers("/api/contactus").permitAll()
